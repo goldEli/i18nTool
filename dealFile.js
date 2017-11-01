@@ -4,10 +4,9 @@ var fs = require('fs');
 var iconv = require('iconv-lite');   
 
 var zh = require('./zh.js').zh;
-    
-var file = "./test.js";  
- 
-readFile(file);   
+
+
+// readFile(files);   
 
 // 读文件
 function readFile(file){  
@@ -66,3 +65,4 @@ function CheckChinese(val){
     return false
 }
 
+exports.dealFile = readFile;

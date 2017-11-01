@@ -1,11 +1,11 @@
 // do something
 var a = [1,2,3]
 var key = [
-    "what","ok"
+    "什么","好的"
 ]
 
 function render() {
     return (
-        <p>"ok"</p>
+        <p>"好的"</p>
     )
 }
