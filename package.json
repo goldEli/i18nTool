@@ -1,0 +1,15 @@
+{
+  "name": "dealfile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dealFile.js",
+  "dependencies": {
+    "iconv-lite": "^0.4.19"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "miaoyu <miaoyu2009@qq.com> (https://github.com/goldEli)",
+  "license": "ISC"
+}
