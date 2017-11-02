@@ -14,11 +14,11 @@ var index = 0;
 function readFile(file){  
     fs.readFile(file, function(err, data){  
         if(err)  
-            console.log(file+ "读取文件fail " + err);  
+            console.log("读取文件fail " + err + file);  
         else{  
             // 读取成功时  
             // 输出字节数组  
-            console.log(file + "读文件操作成功")
+            console.log("读文件操作成功" + file)
 
             // 切换为utf-8
             var str = iconv.decode(data, 'utf-8'); 
