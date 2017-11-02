@@ -3,7 +3,7 @@ var fs = require('fs');
 // 加载编码转换模块  
 var iconv = require('iconv-lite');   
 
-var zh = require('./zh.js').zh;
+var zh = require('./i18n/zh').zh;
 
 
 // readFile(files);   
@@ -18,25 +18,30 @@ function readFile(file){
             // 输出字节数组  
             console.log(file + "读文件操作成功")
 
-            // 把数组转换为gbk中文  
+            // 切换为utf-8
             var str = iconv.decode(data, 'utf-8'); 
 
             // 把文件中代码按行分割出来
             var arr = str.split('\n'); 
  
             arr.forEach(function(e,i) {
+                console.log('e:',e)
                 // 这行如果有中文
-                if (CheckChinese(e)) {
+                if (checkChinese(e)) {
                     // 将中文抽成数组
                     var a = e.split(/['"]/)
                     
                     // 替换中文
-                    var temp = e;
+
                     a.forEach(function(m){
-                        if (zh[m]) {
-                            e = e.replace(m,zh[m])
-                            arr[i] = e
+                        if (checkChinese(m)){
+                            e = e.replace('"' + m + '"', '$i18n["'+getKeybyValue(zh, m)+'"]');
+                            arr[i] = e;
                         }
+                        // if (zh[m]) {
+                        //     e = e.replace(m,zh[m])
+                        //     arr[i] = e
+                        // }
                     })
                 }
             }, this);
@@ -58,8 +63,18 @@ function writeFile(file, data){
     });
 } 
 
+// 根据value, 得到key
+function getKeybyValue(obj,val){
+    for (var key in obj) {
+        if (obj[key] == val) {
+            return key
+        }
+    }
+    return false
+}
+
 // 判断字符串中是否包含汉子
-function CheckChinese(val){     
+function checkChinese(val){     
     var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
     if(reg.test(val)){return true}
     return false
