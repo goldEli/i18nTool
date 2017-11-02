@@ -18,6 +18,7 @@ function ScanDir(path) {
 }
 
 ScanDir(path)
+console.log("共需要扫描 "+files.length+" 个文件")
 files.forEach(function(ele){
   dealFile(ele);
 })

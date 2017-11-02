@@ -5,6 +5,8 @@ var iconv = require('iconv-lite');
 
 var zh = require('./i18n/zh').zh;
 
+var index = 0;
+
 
 // readFile(files);   
 
@@ -23,11 +25,14 @@ function readFile(file){
 
             // 把文件中代码按行分割出来
             var arr = str.split('\n'); 
+
+            // 是否存在中文需要替换
+            var isChineseInit = false;
  
             arr.forEach(function(e,i) {
-                console.log('e:',e)
                 // 这行如果有中文
                 if (checkChinese(e)) {
+                    isChineseInit = true;
                     // 将中文抽成数组
                     var a = e.split(/['"]/)
                     
@@ -47,7 +52,9 @@ function readFile(file){
             }, this);
 
             // 把处理好的数组再重新转成字符串，覆盖原文件
-            writeFile( file, arr.join('\n') ); 
+            if (isChineseInit) {
+                writeFile( file, arr.join('\n') ); 
+            }    
         }  
     });  
 }  
@@ -58,7 +65,8 @@ function writeFile(file, data){
         if(err) {
             console.log(file+'写文件操作失败:',err);
         } else {
-            console.log(file+'写文件操作成功');
+            ++index;
+            console.log("第"+index+'个文件写入成功'+file);
         }    
     });
 } 
