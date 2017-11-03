@@ -1,9 +1,20 @@
+/**
+ *  create by miaoyu  2017/11/2
+ * 
+ *  将中文替换成变量 
+ */
+
+
 // 加载File System读写模块  
 var fs = require('fs');  
 // 加载编码转换模块  
 var iconv = require('iconv-lite');   
 
 var zh = require('./i18n/zh').zh;
+
+var scanDir = require('./readFiles').dealFiles.scanDir;
+
+var path = '/Users/snail/Desktop/temp/dealFile/src'
 
 var index = 0;
 
@@ -37,7 +48,6 @@ function readFile(file){
                     var a = e.split(/['"]/)
                     
                     // 替换中文
-
                     a.forEach(function(m){
                         if (checkChinese(m)){
                             e = e.replace('"' + m + '"', '$i18n["'+getKeybyValue(zh, m)+'"]');
@@ -87,5 +97,15 @@ function checkChinese(val){
     if(reg.test(val)){return true}
     return false
 }
+
+
+let files = scanDir(path);
+console.log("共需要扫描 "+files.length+" 个文件")
+files.forEach(function(ele){
+  // 只读取后缀为.js .html的文件
+  if (is_filetype(ele, 'js,html')) {
+    readFile(ele);
+  }
+})
 
 exports.dealFile = readFile;
