@@ -13,6 +13,8 @@ var oldRe = require('./i18n/oldResource');
 var incrementRe = {}
 
 var rootPath = '/Users/snail/Desktop/temp/dealFile/';
+var folderPath = rootPath + '/i18n/inResource';
+var filePath = rootPath + '/i18n/inResource/inResource.js';
 
 for (let i in newRe) {
     let flag = false;
@@ -31,7 +33,7 @@ generateFiles(incrementRe)
 
 // 生成key value对象的js文件
 function generateFiles(o) {
-    mkdir(rootPath + '/i18n/inResource');
+    mkdir(folderPath);
     var strHead = 'var resource = {'
         , strEnd = '} \n exports.resource = resource;'
         , all = []
@@ -44,6 +46,6 @@ function generateFiles(o) {
 
     all.push(strEnd)
 
-    writeFile(rootPath + '/i18n/inResource/inResource.js',all.join('\n'))
+    writeFile(filePath,all.join('\n'))
 }
 

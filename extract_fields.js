@@ -12,8 +12,14 @@ var mkdir = require('./dealFiles').dealFiles.mkdir;
 // 加载编码转换模块  
 var iconv = require('iconv-lite');   
 
+// 需要扫描的路径
 var path = '/Users/snail/Desktop/temp/dealFile/src';
+// 项目根路径
 var rootPath = '/Users/snail/Desktop/temp/dealFile/';
+// 新建文件夹路径
+var floderPath = rootPath + '/i18n/zh';
+// 新建文件路径
+var filePath = rootPath + '/i18n/zh/resource.js';
 
 var files = scanDir(path);
 
@@ -42,7 +48,7 @@ Promise.all(
 
 // 生成key value对象的js文件
 function generateFiles(o) {
-    mkdir(rootPath + '/i18n/zh');
+    mkdir(floderPath);
     var strHead = 'var resource = {'
         , strEnd = '} \n exports.resource = resource;'
         , all = []
@@ -55,7 +61,7 @@ function generateFiles(o) {
 
     all.push(strEnd)
 
-    writeFile(rootPath + '/i18n/zh/resource.js',all.join('\n'))
+    writeFile(filePath,all.join('\n'))
 }
 
 // 将提取到的中文放入数组
