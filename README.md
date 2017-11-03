@@ -14,7 +14,11 @@ var path = "文件路径"
 
 * 在zh.js修改替换的规则
 
-* 运行(运行后查看`/src`中文件内容的变化)：
+* 运行
 ```
-node readFiles.js
+// 提取代码中所有的的中文，并生成资源文件
+node extract_fields.js
+
+// 新的资源和老的资源对比，提取出新增的中文，并生成资源文件
+node dealIncrement.js
 ```

@@ -86,4 +86,4 @@ md.readFile = (file, cb) => {
 //   }
 // })
 
-exports.dealFiles = md
+module.exports = md

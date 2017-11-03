@@ -4,9 +4,9 @@
  *  提取全部中文 
  */
 
-var scanDir = require('./dealFiles').dealFiles.scanDir;
-var readFile = require('./dealFiles').dealFiles.readFile;
-var writeFile = require('./dealFiles').dealFiles.writeFile;
+var scanDir = require('./dealFiles').scanDir;
+var readFile = require('./dealFiles').readFile;
+var writeFile = require('./dealFiles').writeFile;
 var mkdir = require('./dealFiles').dealFiles.mkdir;
 
 // 加载编码转换模块  
@@ -44,7 +44,7 @@ Promise.all(
 function generateFiles(o) {
     mkdir(rootPath + '/i18n/zh');
     var strHead = 'var resource = {'
-        , strEnd = '}'
+        , strEnd = '} \n exports.resource = resource;'
         , all = []
 
     all.push(strHead)    
