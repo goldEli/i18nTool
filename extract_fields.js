@@ -7,7 +7,7 @@
 var scanDir = require('./dealFiles').scanDir;
 var readFile = require('./dealFiles').readFile;
 var writeFile = require('./dealFiles').writeFile;
-var mkdir = require('./dealFiles').dealFiles.mkdir;
+var mkdir = require('./dealFiles').mkdir;
 
 // 加载编码转换模块  
 var iconv = require('iconv-lite');   
@@ -84,7 +84,7 @@ function getChineseToArray (content, file, resolve) {
             
             // 抽取中文
             a.forEach(function(m, index){
-                if (checkChinese(m)){
+                if (checkChinese(m) && m.indexOf('//') == -1){
                     var key = file.replace(/\//g,'_');
                     key = key.slice(0,key.indexOf('.'))
                     obj[key + "_" + i +index] = m;
