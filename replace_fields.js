@@ -43,7 +43,7 @@ files.map(function(file){
                         // 将中文抽成数组
                         var a = e.split(/['"]/)
                         
-                        // 抽取中文
+                        // 抽取中文 并替换
                         a.forEach(function(m, index){
                             if (checkChinese(m) 
                                 && m.indexOf('* ') == -1
@@ -52,15 +52,14 @@ files.map(function(file){
                                 && m.indexOf('>') != -1
                             ){
                                 let ss = m.split('>')
-                                console.log('i',i,arr[i])
-                                console.log('ss',ss)
-                                ss.forEach(function(ele){
+                               
+                                ss.forEach(function(ele, j){
                                     if (checkChinese(ele)) {
                                         let kk = ele
                                         kk = kk.substr(0, kk.indexOf('<'))
-                                        console.log("m",m)
+
                                         if (checkChinese(kk)) {
-                                            arr[i] = m.replace(kk, '{"' + kk + '"}')
+                                            arr[i] = arr[i].replace(kk, '{"' + kk + '"}')
                                         }
                                        
                                     }      
