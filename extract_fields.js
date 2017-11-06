@@ -1,7 +1,12 @@
 /**
  *  create by miaoyu  2017/11/3
  * 
- *  提取全部中文 
+ *  提取全部中文, 生成资源文件
+ * 
+ *  -zh
+ *    -resource.js
+ *  -en
+ *    -resource.js 
  */
 
 var scanDir = require('./dealFiles').scanDir;
@@ -12,60 +17,85 @@ var mkdir = require('./dealFiles').mkdir;
 // 加载编码转换模块  
 var iconv = require('iconv-lite');   
 
-// 需要扫描的路径
-var path = '/Users/snail/Desktop/temp/dealFile/src';
-// 项目根路径
-var rootPath = '/Users/snail/Desktop/temp/dealFile/';
-// 新建文件夹路径
-var floderPath = rootPath + '/i18n/zh';
-// 新建文件路径
-var filePath = rootPath + '/i18n/zh/resource.js';
+function md(path, resourcePath, cb) {
+    // 提取出的中文 对应的key value
+    var obj = {};
 
-var files = scanDir(path);
-
-
-// 提取出的中文 对应的key value
-var obj = {};
-
-
-
-Promise.all(
-    files.map(function(file){
-        // 只读取后缀为.js .html的文件
-        if (is_filetype(file, 'js,html')) {
-            return new Promise(function (resolve, reject) {
-                readFile(file, function (content) {
-                    
-                    getChineseToArray(content, file, resolve)
-                    resolve()
-                });
-            })
-        }
+    var files = scanDir(path);
+    Promise.all(
+        files.map(function(file){
+            // 只读取后缀为.js .html的文件
+            if (is_filetype(file, 'js,html')) {
+                return new Promise(function (resolve, reject) {
+                    readFile(file, function (content) {
+                        
+                        getChineseToArray(content, file, obj)
+                        resolve()
+                    });
+                })
+            }
+        })
+    ).then(function () {
+        generateFiles( resourcePath, clearRepeat(obj), cb )
     })
-).then(function () {
-    generateFiles( clearRepeat(obj) )
-})
+}
 
 // 生成key value对象的js文件
-function generateFiles(o) {
-    mkdir(floderPath);
-    var strHead = 'var resource = {'
-        , strEnd = '} \n exports.resource = resource;'
-        , all = []
+function generateFiles(floderPath, o, cb) {
 
-    all.push(strHead)    
+    Promise.all(
+        [
+            new Promise(function(resolve, reject){
+                    // 生成中文资源
+                mkdir(floderPath+'/zh', function() {
+                    var strHead = 'var resource = {'
+                    , strEnd = '} \n module.exports = resource;'
+                    , all = []
 
-    for (let key in o) {
-        all.push(key+': '+ '"' + o[key] + '"' + ',')
-    }
+                    all.push(strHead)    
 
-    all.push(strEnd)
+                    for (let key in o) {
+                        all.push(key +': '+ '"' + o[key] + '"' + ',')
+                    }
 
-    writeFile(filePath,all.join('\n'))
+                    all.push(strEnd)
+
+                    writeFile(floderPath+'/zh/resource.js',all.join('\n'), function(){
+                        resolve();
+                    })
+                });
+            }),
+            new Promise(function(resolve, reject){
+                // 生成英文资源
+                mkdir(floderPath+'/en', function() {
+                    var strHead = 'var resource = {'
+                    , strEnd = '} \n module.exports = resource;'
+                    , all = []
+
+                    all.push(strHead)    
+
+                    for (let key in o) {
+                        all.push(key +': '+ '"' + '"' + ',')
+                    }
+
+                    all.push(strEnd)
+
+                    writeFile(floderPath+'/en/resource.js',all.join('\n'), function () {
+                        resolve();
+                    })
+                });
+            })
+        ]
+    ).then(function() {
+        console.log('生成资源文件完成！')
+        if (cb) {
+            cb()
+        }
+    })
 }
 
 // 将提取到的中文放入数组
-function getChineseToArray (content, file, resolve) {
+function getChineseToArray (content, file, obj) {
 
     var str = iconv.decode(content, 'utf-8'); 
 
@@ -87,10 +117,11 @@ function getChineseToArray (content, file, resolve) {
                 if (checkChinese(m) && m.indexOf('//') == -1){
                     var key = file.replace(/\//g,'_');
                     key = key.slice(0,key.indexOf('.'))
-                    obj[key + "_" + i +index] = m;
+                    obj['"' + key + "_" + i +index + '"'] = m;
                 }
             })
         }
+
     }, this);
 }
 
@@ -126,4 +157,8 @@ function is_filetype(filename, types) {
     }
     pattern += ')$';
     return new RegExp(pattern, 'i').test(filename);
-  }; 
+}; 
+
+module.exports = md;
+
+

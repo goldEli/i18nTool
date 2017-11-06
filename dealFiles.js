@@ -18,11 +18,19 @@ let files = []
 md.copyDir = copyDir;
 
 // 生成文件
-md.mkdir = (path) => {
+md.mkdir = (path, cb) => {
   fs.exists(path, function(exists){
 
     if (!exists) {
-      fs.mkdir(path);
+      fs.mkdir(path, function () {
+          if (typeof cb == "function") {
+            cb()
+          } 
+      });
+    } else {
+      if (typeof cb == "function") {
+        cb()
+      } 
     }
   })
   
@@ -64,12 +72,15 @@ md.copyFloder = (path, newPath) => {
 
 
 // 写文件
-md.writeFile = (file, data) =>{  
+md.writeFile = (file, data, cb) =>{  
   fs.writeFile(file, data,function(err, data){
       if(err) {
           console.log(file+'写文件操作失败:',err);
       } else {
           console.log('写入成功'+file);
+          if (cb) {
+            cb()
+          }
       }    
   });
 } 

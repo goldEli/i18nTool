@@ -7,45 +7,47 @@
 var mkdir = require('./dealFiles').mkdir;
 var writeFile = require('./dealFiles').writeFile;
 
-var newRe = require('./i18n/zh/resource');
-var oldRe = require('./i18n/oldResource');
 
-var incrementRe = {}
+function md(oldRe, newRe, folderPath) {
 
-var rootPath = '/Users/snail/Desktop/temp/dealFile/';
-var folderPath = rootPath + '/i18n/inResource';
-var filePath = rootPath + '/i18n/inResource/inResource.js';
+    var incrementRe = {}
 
-for (let i in newRe) {
-    let flag = false;
-    for (let j in oldRe) {
-        if (newRe[i] == oldRe[j]) {
-            flag = true;
-            break
+    for (let i in newRe) {
+        let flag = false;
+        for (let j in oldRe) {
+            if (newRe[i] == oldRe[j]) {
+                flag = true;
+                break
+            }
+        }
+        if (!flag) {
+            incrementRe[i] = newRe[i]
         }
     }
-    if (!flag) {
-        incrementRe[i] = newRe[i]
-    }
+
+    generateFiles(incrementRe, folderPath)
 }
 
-generateFiles(incrementRe)
+
+
 
 // 生成key value对象的js文件
-function generateFiles(o) {
-    mkdir(folderPath);
-    var strHead = 'var resource = {'
+function generateFiles(o,folderPath) {
+    mkdir(folderPath, function() {
+        var strHead = 'var resource = {'
         , strEnd = '} \n exports.resource = resource;'
         , all = []
 
-    all.push(strHead)    
+        all.push(strHead)    
 
-    for (let key in o) {
-        all.push(key+': '+ '"' + o[key] + '"' + ',')
-    }
+        for (let key in o) {
+            all.push("'" + key + "'" +': '+ '"' + o[key] + '"' + ',')
+        }
 
-    all.push(strEnd)
+        all.push(strEnd)
 
-    writeFile(filePath,all.join('\n'))
+        writeFile(folderPath + '/inResource.js',all.join('\n'))
+    });
 }
 
+module.exports = md;
