@@ -5,4 +5,4 @@ _Users_snail_Desktop_temp_dealFile_src_jjj_test1_101: "用户权限信息无效�
 _Users_snail_Desktop_temp_dealFile_src_jjj_test1_111: "好的",
 _Users_snail_Desktop_temp_dealFile_src_jjj_test2_100: "         <p>用户权限信息无效，验证权限失败</p>",
 } 
- exports.resource = resource;
+ module.exports = resource;

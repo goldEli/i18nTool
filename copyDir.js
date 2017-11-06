@@ -1,31 +1,19 @@
-// do something
-var a = [1,2,3]
-var key = [
-    "测试用户",
-    "什么",
-]
+/**
+ *  create by miaoyu  2017/8/14 
+ * 
+ *  use:
+ *  copyDir(path1.pathOne, path1.pathTwo, function (err) {  
+        if (err) {  
+            console.log("error ocur");  
+            console.dir(err);  
+        } else {  
+    
+            console.log("copy ok");  
+            console.log("consume time:" + (new Date().getTime() - start))  
+        }  
+    }); 
+ */
 
-function render() {
-    return (
-        `
-        <div>
-         <p>{"用户权限信息无效，验证权限失败！"}</p>
-         <p>{"好的"}</p>
-        </div>
-        `
-    )
-}
-
-
-
-
-
-
-//需要同步的文件夹路径
-var path1 = {
-    "pathOne": "/Users/snail/Desktop/temp/dealFile/src",
-    "pathTwo": "/Users/snail/Desktop/temp/dealFile/src_translate"
-};
 
 var async = require("async");  
 var fs = require("fs");  
@@ -208,14 +196,7 @@ function copyDir(from, to, cb) {
 }  
   
 var start = new Date().getTime();  
+
+module.exports = copyDir
   
-copyDir(path1.pathOne, path1.pathTwo, function (err) {  
-    if (err) {  
-        console.log("error ocur");  
-        console.dir(err);  
-    } else {  
-  
-        console.log("copy ok");  
-        console.log("consume time:" + (new Date().getTime() - start))  
-    }  
-});  
+ 

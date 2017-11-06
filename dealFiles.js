@@ -6,13 +6,16 @@
 
 
 const fs = require('fs')
-// var path = '/Users/snail/Desktop/temp/dealFile/src';
+const copyDir = require('./copyDir')
 
 
 
 var md = {}
 
 let files = []
+
+// 复制文件
+md.copyDir = copyDir;
 
 // 生成文件
 md.mkdir = (path) => {
@@ -53,6 +56,12 @@ md.scanDir = (path) => {
 //   pattern += ')$';
 //   return new RegExp(pattern, 'i').test(filename);
 // }; 
+
+// 复制文件 
+md.copyFloder = (path, newPath) => {
+  fs.createReadStream(path).pipe(fs.createWriteStream(newPath));
+}
+
 
 // 写文件
 md.writeFile = (file, data) =>{  
