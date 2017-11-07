@@ -15,17 +15,17 @@ npm install
 
 ### 运行
 
-提取代码中所有的的中文，并生成资源文件
+提取代码中所有的的中文，并生成资源文件(`/zh` `/en`)
 ```
 node forBegin.js
 ```
 
-开发过程中(提取全部中文，并对比，生成增量资源)
+开发过程中(提取全部中文，并对比，生成增量资源`/inResource`)
 ```
 node forDev.js
 ```
 
-开发完成（替换中文）
+开发完成（替换中文, 生成`src_translate`）
 ```
 node forBuild.js
 ```

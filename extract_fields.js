@@ -107,14 +107,26 @@ function getChineseToArray (content, file, obj) {
 
     arr.forEach(function(e,i) {
         // 这行如果有中文
-        if (checkChinese(e)) {
+        if (
+            checkChinese(e)
+            && e.indexOf('//') == -1 
+            && e.indexOf('console.log') == -1
+            && e.indexOf('@param') == -1
+            && e.indexOf('@brief') == -1
+        ) {
             isChineseInit = true;
             // 将中文抽成数组
             var a = e.split(/['"]/)
             
             // 抽取中文
             a.forEach(function(m, index){
-                if (checkChinese(m) && m.indexOf('//') == -1){
+                if (
+                    checkChinese(m) 
+                    && m.indexOf('* ') == -1
+                    && m.indexOf(' * ') == -1
+                    && m.indexOf('/*') == -1
+                    && m.indexOf('<!--') == -1
+                ){
                     var key = file.replace(/\//g,'_');
                     key = key.slice(0,key.indexOf('.'))
                     obj['"' + key + "_" + i +index + '"'] = m;
